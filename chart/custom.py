@@ -79,7 +79,7 @@ def getValues():
     return None
 
 # to get rows to be deleted from db. working with nested data types.
-def format_values(response: list, values: list):
+def format_values(response: list, values: list) -> set:
     if len(response) > 0 and len(values) > 0:
 
         # getting order_number
@@ -94,7 +94,7 @@ def format_values(response: list, values: list):
         return to_be_deleted
 
 # check if date of delivery is expired 
-def checkExpiredDate(values: list):
+def checkExpiredDate(values: list)  -> list:
     try:
         if values != None:
             current_date = getTodaysDate()
@@ -108,7 +108,7 @@ def checkExpiredDate(values: list):
         return None
 
 # send message to telegram chat
-def sendMessage(expired_orders):
+def sendMessage(expired_orders: list):
     if expired_orders:
         message = "Expired orders: "
         orders = ', '.join(expired_orders)
@@ -116,7 +116,7 @@ def sendMessage(expired_orders):
         bot.send_message(CHAT_ID ,text=message+orders)
 
 # insert values into db
-def insertValues(values):
+def insertValues(values: list):
     # connecting to db
     connection = psycopg2.connect(
         host = HOST,
