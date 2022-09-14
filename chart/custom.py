@@ -26,19 +26,19 @@ PASSWORD = ""
 
 
 # today's date))
-def getTodaysDate():
+def getTodaysDate() -> str:
     now = datetime.now()
     return now.strftime(r'%d/%m/%Y')
 
 # get price of one dollar in ruble
-def getRuble():
+def getRuble() -> float:
     response = requests.get(f"https://www.cbr.ru/scripts/XML_daily.asp?date_req={getTodaysDate()}")
     soup = Bs(response.content, features='xml')
     ruble = soup.find("Valute", attrs={"ID":"R01235"})
     return float(ruble.find("Value").string.replace(',', '.'))
 
 # get values from google sheet
-def getValues():
+def getValues() -> list:
     try:
         creds = service_account.Credentials.from_service_account_file(
             SERVICE_ACCOUNT_FILE, scopes=SCOPES)
@@ -71,7 +71,7 @@ def getValues():
                         values.append(i)
                 except ValueError:
                     continue
-            # change list into tuple for further addition to database
+            # change each row in list into tuple for further addition to database
             tupled_values = [tuple(x) for x in values]
             return tupled_values
         except HttpError as err:
